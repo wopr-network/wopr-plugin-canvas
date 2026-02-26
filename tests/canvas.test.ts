@@ -7,6 +7,7 @@ import {
   canvasGet,
   setCanvasPublish,
   setCanvasEmitCustom,
+  clearCanvasInjections,
   _resetCanvasState,
 } from "../src/canvas.js";
 
@@ -155,6 +156,28 @@ describe("canvas operations", () => {
       const items = canvasGet("s1");
       items.push({ id: "x", type: "html", content: "b", pushedAt: 0 });
       expect(canvasGet("s1")).toHaveLength(1);
+    });
+  });
+
+  describe("clearCanvasInjections", () => {
+    it("clears publish and emitCustom injections", async () => {
+      const pub = vi.fn();
+      const emit = vi.fn().mockResolvedValue(undefined);
+      setCanvasPublish(pub);
+      setCanvasEmitCustom(emit);
+
+      // Push triggers both
+      await canvasPush("s1", "html", "before");
+      expect(pub).toHaveBeenCalledTimes(1);
+      expect(emit).toHaveBeenCalledTimes(1);
+
+      // Clear injections
+      clearCanvasInjections();
+
+      // Push after clear — neither should fire
+      await canvasPush("s1", "html", "after");
+      expect(pub).toHaveBeenCalledTimes(1); // still 1
+      expect(emit).toHaveBeenCalledTimes(1); // still 1
     });
   });
 });

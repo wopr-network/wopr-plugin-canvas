@@ -12,16 +12,9 @@
  *   GET    /canvas/:session/snapshot — take and return a snapshot
  */
 
-import { HTTPException } from "hono/http-exception";
 import { Hono } from "hono";
-import {
-  type CanvasContentType,
-  canvasGet,
-  canvasPush,
-  canvasRemove,
-  canvasReset,
-  canvasSnapshot,
-} from "./canvas.js";
+import { HTTPException } from "hono/http-exception";
+import { type CanvasContentType, canvasGet, canvasPush, canvasRemove, canvasReset, canvasSnapshot } from "./canvas.js";
 
 /**
  * Validates a session name from URL parameters to prevent path traversal (CWE-22).
