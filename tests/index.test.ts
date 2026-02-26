@@ -4,9 +4,10 @@ import plugin from "../src/index.js";
 function createMockCtx() {
   return {
     registerExtension: vi.fn(),
+    unregisterExtension: vi.fn(),
     registerA2AServer: vi.fn(),
     getSessions: vi.fn(() => []),
-    hooks: { on: vi.fn() },
+    hooks: { on: vi.fn(() => vi.fn()) },
     events: { emitCustom: vi.fn() },
     log: { info: vi.fn(), error: vi.fn(), warn: vi.fn(), debug: vi.fn() },
   };
@@ -81,6 +82,30 @@ describe("wopr-plugin-canvas plugin", () => {
   });
 
   it("shutdown completes without error", async () => {
-    await expect(plugin.shutdown()).resolves.toBeUndefined();
+    await plugin.init(mockCtx as any);
+    await expect(plugin.shutdown!()).resolves.toBeUndefined();
+  });
+
+  it("has a manifest with required fields", () => {
+    expect(plugin.manifest).toBeDefined();
+    expect(plugin.manifest!.name).toBe("@wopr-network/wopr-plugin-canvas");
+    expect(plugin.manifest!.capabilities).toContain("canvas");
+    expect(plugin.manifest!.category).toBe("workspace");
+    expect(plugin.manifest!.tags).toContain("canvas");
+    expect(plugin.manifest!.icon).toBe(":art:");
+    expect(plugin.manifest!.lifecycle).toBeDefined();
+  });
+
+  it("shutdown unregisters extensions", async () => {
+    await plugin.init(mockCtx as any);
+    await plugin.shutdown!();
+    expect(mockCtx.unregisterExtension).toHaveBeenCalledWith("canvas:router");
+    expect(mockCtx.unregisterExtension).toHaveBeenCalledWith("canvas:setPublish");
+  });
+
+  it("shutdown is idempotent (safe to call twice)", async () => {
+    await plugin.init(mockCtx as any);
+    await plugin.shutdown!();
+    await expect(plugin.shutdown!()).resolves.toBeUndefined();
   });
 });

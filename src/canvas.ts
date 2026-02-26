@@ -31,6 +31,12 @@ export function setCanvasEmitCustom(fn: EmitCustomFn): void {
   _emitCustom = fn;
 }
 
+/** Clear injected publish and emitCustom functions (called on shutdown). */
+export function clearCanvasInjections(): void {
+  _publish = undefined;
+  _emitCustom = undefined;
+}
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
