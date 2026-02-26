@@ -33,6 +33,7 @@ const plugin: WOPRPlugin = {
     author: "WOPR",
     license: "MIT",
     capabilities: ["canvas", "visual-workspace"],
+    requires: {},
     category: "workspace",
     tags: ["canvas", "visual", "html", "markdown", "chart", "form", "workspace"],
     icon: ":art:",
