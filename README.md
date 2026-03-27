@@ -1,3 +1,11 @@
+# ⚠️ This package has moved
+
+This package is now maintained in the [wopr-plugins monorepo](https://github.com/wopr-network/wopr-plugins/tree/main/packages/plugin-canvas).
+
+This repository is archived and no longer accepts contributions.
+
+---
+
 # @wopr-network/wopr-plugin-canvas
 
 > Canvas visual workspace plugin for WOPR — agents push HTML, Markdown, charts, and forms to the WebUI in real time.
